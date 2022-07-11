@@ -134,7 +134,7 @@ impl<E: Source> PollEvented<E> {
 }
 
 feature! {
-    #![any(feature = "net", feature = "process")]
+    #![any(feature = "net", all(unix, feature = "process"))]
 
     use crate::io::ReadBuf;
     use std::task::{Context, Poll};
