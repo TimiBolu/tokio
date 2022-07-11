@@ -170,7 +170,7 @@ where
     T: IntoRawHandle,
 {
     let std_file = unsafe { StdFile::from_raw_handle(io.into_raw_handle()) };
-    Ok(File::from(std_file))
+    Ok(File::from_std(std_file))
 }
 
 pub(crate) fn convert_to_stdio(io: ChildStdio) -> io::Result<Stdio> {
