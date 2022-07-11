@@ -60,7 +60,6 @@ net = [
   "winapi/minwindef",
 ]
 process = [
-  "fs", # TODO: remove this and expose the internals privately
   "bytes",
   "once_cell",
   "libc",

@@ -198,6 +198,14 @@ cfg_not_metrics! {
     pub(crate) use metrics::{SchedulerMetrics, WorkerMetrics, MetricsBatch};
 }
 
+cfg_not_rt! {
+    cfg_fs_internal! {
+        mod blocking;
+        use blocking::BlockingPool;
+        pub(crate) use blocking::spawn_blocking;
+    }
+}
+
 cfg_rt! {
     mod basic_scheduler;
     use basic_scheduler::BasicScheduler;
@@ -210,7 +218,7 @@ cfg_rt! {
         pub(crate) use blocking::Mandatory;
     }
 
-    cfg_fs! {
+    cfg_fs_internal! {
         pub(crate) use blocking::spawn_mandatory_blocking;
     }
 

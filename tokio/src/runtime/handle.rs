@@ -356,7 +356,7 @@ impl HandleInner {
         join_handle
     }
 
-    cfg_fs! {
+    cfg_fs_internal! {
         #[track_caller]
         #[cfg_attr(any(
             all(loom, not(test)), // the function is covered by loom tests

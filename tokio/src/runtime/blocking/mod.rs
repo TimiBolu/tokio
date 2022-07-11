@@ -6,7 +6,7 @@
 mod pool;
 pub(crate) use pool::{spawn_blocking, BlockingPool, Mandatory, Spawner, Task};
 
-cfg_fs! {
+cfg_fs_internal! {
     pub(crate) use pool::spawn_mandatory_blocking;
 }
 

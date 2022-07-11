@@ -267,7 +267,7 @@ impl Buf {
     }
 }
 
-cfg_fs! {
+cfg_fs_internal! {
     impl Buf {
         pub(crate) fn discard_read(&mut self) -> i64 {
             let ret = -(self.bytes().len() as i64);

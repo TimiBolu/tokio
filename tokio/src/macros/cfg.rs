@@ -57,11 +57,14 @@ macro_rules! cfg_aio {
     }
 }
 
-macro_rules! cfg_fs {
+macro_rules! cfg_fs_internal {
     ($($item:item)*) => {
         $(
-            #[cfg(feature = "fs")]
-            #[cfg_attr(docsrs, doc(cfg(feature = "fs")))]
+            #[cfg(any(
+                feature = "fs",
+                all(windows, feature = "process")),
+            )]
+            #[cfg(not(loom))]
             $item
         )*
     }
@@ -69,7 +72,11 @@ macro_rules! cfg_fs {
 
 macro_rules! cfg_io_blocking {
     ($($item:item)*) => {
-        $( #[cfg(any(feature = "io-std", feature = "fs"))] $item )*
+        $( #[cfg(any(
+                feature = "fs",
+                feature = "io-std",
+                all(windows, feature = "process"),
+        ))] $item )*
     }
 }
 

@@ -473,7 +473,7 @@ cfg_sync! {
 }
 
 cfg_not_sync! {
-    cfg_fs! {
+    cfg_fs_internal! {
         pub(crate) mod batch_semaphore;
         mod mutex;
         pub(crate) use mutex::Mutex;

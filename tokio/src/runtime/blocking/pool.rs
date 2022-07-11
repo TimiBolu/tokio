@@ -114,7 +114,7 @@ where
     rt.spawn_blocking(func)
 }
 
-cfg_fs! {
+cfg_fs_internal! {
     #[cfg_attr(any(
         all(loom, not(test)), // the function is covered by loom tests
         test

@@ -401,8 +401,16 @@ compile_error! {
 #[doc(hidden)]
 pub mod macros;
 
-cfg_fs! {
-    pub mod fs;
+#[cfg(feature = "fs")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fs")))]
+pub mod fs;
+
+cfg_fs_internal! {
+    #[cfg(not(feature = "fs"))]
+    #[allow(dead_code)]
+    #[allow(unreachable_pub)]
+    // TODO: this can be thinner without importing the entire fs module
+    pub(crate) mod fs;
 }
 
 mod future;
@@ -417,7 +425,12 @@ cfg_process! {
     pub mod process;
 }
 
-#[cfg(any(feature = "net", feature = "fs", feature = "io-std"))]
+#[cfg(any(
+    feature = "fs",
+    feature = "io-std",
+    feature = "net",
+    all(windows, feature = "process"),
+))]
 mod blocking;
 
 cfg_rt! {
