@@ -15,8 +15,6 @@
 //! `RegisterWaitForSingleObject` and then wait on the other end of the oneshot
 //! from then on out.
 
-#[cfg(test)]
-use crate::fs::mocks::MockFile as StdFile;
 use crate::fs::File;
 use crate::process::kill::Kill;
 use crate::process::SpawnedChild;
@@ -168,12 +166,21 @@ unsafe extern "system" fn callback(ptr: PVOID, _timer_fired: BOOLEAN) {
 
 pub(crate) type ChildStdio = File;
 
+#[cfg(not(test))]
 pub(super) fn stdio<T>(io: T) -> io::Result<ChildStdio>
 where
     T: IntoRawHandle,
 {
     let std_file = unsafe { StdFile::from_raw_handle(io.into_raw_handle()) };
     Ok(File::from(std_file))
+}
+
+#[cfg(test)]
+pub(super) fn stdio<T>(io: T) -> io::Result<ChildStdio>
+where
+    T: IntoRawHandle,
+{
+    unimplemented!()
 }
 
 #[cfg(not(test))]
