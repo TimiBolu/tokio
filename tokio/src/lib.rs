@@ -409,7 +409,6 @@ cfg_fs_internal! {
     #[cfg(not(feature = "fs"))]
     #[allow(dead_code)]
     #[allow(unreachable_pub)]
-    // TODO: this can be thinner without importing the entire fs module
     pub(crate) mod fs;
 }
 

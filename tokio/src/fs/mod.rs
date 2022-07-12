@@ -42,84 +42,88 @@
 //! [`spawn_blocking`]: fn@crate::task::spawn_blocking
 //! [`AsyncRead`]: trait@crate::io::AsyncRead
 
-mod canonicalize;
-pub use self::canonicalize::canonicalize;
-
-mod create_dir;
-pub use self::create_dir::create_dir;
-
-mod create_dir_all;
-pub use self::create_dir_all::create_dir_all;
-
-mod dir_builder;
-pub use self::dir_builder::DirBuilder;
-
 mod file;
 pub use self::file::File;
 
-mod hard_link;
-pub use self::hard_link::hard_link;
-
-mod metadata;
-pub use self::metadata::metadata;
-
-mod open_options;
-pub use self::open_options::OpenOptions;
-
-mod read;
-pub use self::read::read;
-
-mod read_dir;
-pub use self::read_dir::{read_dir, DirEntry, ReadDir};
-
-mod read_link;
-pub use self::read_link::read_link;
-
-mod read_to_string;
-pub use self::read_to_string::read_to_string;
-
-mod remove_dir;
-pub use self::remove_dir::remove_dir;
-
-mod remove_dir_all;
-pub use self::remove_dir_all::remove_dir_all;
-
-mod remove_file;
-pub use self::remove_file::remove_file;
-
-mod rename;
-pub use self::rename::rename;
-
-mod set_permissions;
-pub use self::set_permissions::set_permissions;
-
-mod symlink_metadata;
-pub use self::symlink_metadata::symlink_metadata;
-
-mod write;
-pub use self::write::write;
-
-mod copy;
-pub use self::copy::copy;
-
-#[cfg(test)]
-mod mocks;
-
 feature! {
-    #![unix]
+    #![feature = "fs"]
 
-    mod symlink;
-    pub use self::symlink::symlink;
-}
+    mod canonicalize;
+    pub use self::canonicalize::canonicalize;
 
-feature! {
-    #![windows]
+    mod create_dir;
+    pub use self::create_dir::create_dir;
 
-    mod symlink_dir;
-    pub use self::symlink_dir::symlink_dir;
+    mod create_dir_all;
+    pub use self::create_dir_all::create_dir_all;
 
-    mod symlink_file;
-    pub use self::symlink_file::symlink_file;
+    mod dir_builder;
+    pub use self::dir_builder::DirBuilder;
+
+    mod hard_link;
+    pub use self::hard_link::hard_link;
+
+    mod metadata;
+    pub use self::metadata::metadata;
+
+    mod open_options;
+    pub use self::open_options::OpenOptions;
+
+    mod read;
+    pub use self::read::read;
+
+    mod read_dir;
+    pub use self::read_dir::{read_dir, DirEntry, ReadDir};
+
+    mod read_link;
+    pub use self::read_link::read_link;
+
+    mod read_to_string;
+    pub use self::read_to_string::read_to_string;
+
+    mod remove_dir;
+    pub use self::remove_dir::remove_dir;
+
+    mod remove_dir_all;
+    pub use self::remove_dir_all::remove_dir_all;
+
+    mod remove_file;
+    pub use self::remove_file::remove_file;
+
+    mod rename;
+    pub use self::rename::rename;
+
+    mod set_permissions;
+    pub use self::set_permissions::set_permissions;
+
+    mod symlink_metadata;
+    pub use self::symlink_metadata::symlink_metadata;
+
+    mod write;
+    pub use self::write::write;
+
+    mod copy;
+    pub use self::copy::copy;
+
+    #[cfg(test)]
+    mod mocks;
+
+    feature! {
+        #![unix]
+
+        mod symlink;
+        pub use self::symlink::symlink;
+    }
+
+    feature! {
+        #![windows]
+
+        mod symlink_dir;
+        pub use self::symlink_dir::symlink_dir;
+
+        mod symlink_file;
+        pub use self::symlink_file::symlink_file;
+    }
 }
 
 use std::io;
