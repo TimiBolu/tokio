@@ -196,7 +196,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ env.rust_nightly }}
-          components: miri
+          components: miri, rust-src
           override: true
       - uses: Swatinem/rust-cache@v1
       - name: miri
