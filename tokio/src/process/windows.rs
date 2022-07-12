@@ -15,12 +15,15 @@
 //! `RegisterWaitForSingleObject` and then wait on the other end of the oneshot
 //! from then on out.
 
+#[cfg(test)]
+use crate::fs::mocks::MockFile as StdFile;
 use crate::fs::File;
 use crate::process::kill::Kill;
 use crate::process::SpawnedChild;
 use crate::sync::oneshot;
 
 use std::fmt;
+#[cfg(not(test))]
 use std::fs::File as StdFile;
 use std::future::Future;
 use std::io;
@@ -170,12 +173,18 @@ where
     T: IntoRawHandle,
 {
     let std_file = unsafe { StdFile::from_raw_handle(io.into_raw_handle()) };
-    Ok(File::from_std(std_file))
+    Ok(File::from(std_file))
 }
 
+#[cfg(not(test))]
 pub(crate) fn convert_to_stdio(io: ChildStdio) -> io::Result<Stdio> {
     match io.try_into_std() {
         Ok(std) => Ok(Stdio::from(std)),
         Err(_) => Err(io::Error::new(io::ErrorKind::Other, "pending I/O")),
     }
+}
+
+#[cfg(test)]
+pub(crate) fn convert_to_stdio(_io: ChildStdio) -> io::Result<Stdio> {
+    Ok(Stdio::null())
 }
