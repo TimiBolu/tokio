@@ -189,7 +189,6 @@ where
     unimplemented!()
 }
 
-#[cfg(not(test))]
 pub(crate) fn convert_to_stdio(io: ChildStdio) -> io::Result<Stdio> {
     use std::os::windows::prelude::FromRawHandle;
 
@@ -213,9 +212,4 @@ pub(crate) fn convert_to_stdio(io: ChildStdio) -> io::Result<Stdio> {
 
         Ok(Stdio::from_raw_handle(dup_handle))
     }
-}
-
-#[cfg(test)]
-pub(crate) fn convert_to_stdio(_io: ChildStdio) -> io::Result<Stdio> {
-    Ok(Stdio::null())
 }
