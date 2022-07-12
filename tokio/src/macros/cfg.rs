@@ -64,7 +64,6 @@ macro_rules! cfg_fs_internal {
                 feature = "fs",
                 all(windows, feature = "process")),
             )]
-            #[cfg(not(loom))]
             $item
         )*
     }
