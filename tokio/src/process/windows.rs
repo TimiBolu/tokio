@@ -25,7 +25,7 @@ use std::fmt;
 use std::fs::File as StdFile;
 use std::future::Future;
 use std::io;
-use std::os::windows::prelude::{AsRawHandle, RawHandle};
+use std::os::windows::prelude::{AsRawHandle, IntoRawHandle, RawHandle};
 use std::pin::Pin;
 use std::process::Stdio;
 use std::process::{Child as StdChild, Command as StdCommand, ExitStatus};
@@ -171,7 +171,7 @@ pub(super) fn stdio<T>(io: T) -> io::Result<ChildStdio>
 where
     T: IntoRawHandle,
 {
-    use std::os::windows::prelude::{FromRawHandle, IntoRawHandle};
+    use std::os::windows::prelude::FromRawHandle;
 
     let std_file = unsafe { StdFile::from_raw_handle(io.into_raw_handle()) };
     Ok(File::from(std_file))
