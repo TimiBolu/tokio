@@ -68,6 +68,8 @@ process = [
   "mio/net",
   "signal-hook-registry",
   "winapi/handleapi",
+  "winapi/minwindef",
+  "winapi/processthreadsapi",
   "winapi/threadpoollegacyapiset",
   "winapi/winbase",
   "winapi/winnt",

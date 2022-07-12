@@ -32,10 +32,14 @@ use std::process::{Child as StdChild, Command as StdCommand, ExitStatus};
 use std::ptr;
 use std::task::Context;
 use std::task::Poll;
-use winapi::um::handleapi::INVALID_HANDLE_VALUE;
+use winapi::shared::minwindef::{DWORD, FALSE};
+use winapi::um::handleapi::{DuplicateHandle, INVALID_HANDLE_VALUE};
+use winapi::um::processthreadsapi::GetCurrentProcess;
 use winapi::um::threadpoollegacyapiset::UnregisterWaitEx;
 use winapi::um::winbase::{RegisterWaitForSingleObject, INFINITE};
-use winapi::um::winnt::{BOOLEAN, HANDLE, PVOID, WT_EXECUTEINWAITTHREAD, WT_EXECUTEONLYONCE};
+use winapi::um::winnt::{
+    BOOLEAN, DUPLICATE_SAME_ACCESS, HANDLE, PVOID, WT_EXECUTEINWAITTHREAD, WT_EXECUTEONLYONCE,
+};
 
 #[must_use = "futures do nothing unless polled"]
 pub(crate) struct Child {
@@ -187,9 +191,27 @@ where
 
 #[cfg(not(test))]
 pub(crate) fn convert_to_stdio(io: ChildStdio) -> io::Result<Stdio> {
-    match io.try_into_std() {
-        Ok(std) => Ok(Stdio::from(std)),
-        Err(_) => Err(io::Error::new(io::ErrorKind::Other, "pending I/O")),
+    use std::os::windows::prelude::FromRawHandle;
+
+    unsafe {
+        let mut dup_handle = INVALID_HANDLE_VALUE;
+        let cur_proc = GetCurrentProcess();
+
+        let status = DuplicateHandle(
+            cur_proc,
+            io.as_raw_handle(),
+            cur_proc,
+            &mut dup_handle,
+            0 as DWORD,
+            FALSE,
+            DUPLICATE_SAME_ACCESS,
+        );
+
+        if status == 0 {
+            return Err(io::Error::last_os_error());
+        }
+
+        Ok(Stdio::from_raw_handle(dup_handle))
     }
 }
 
